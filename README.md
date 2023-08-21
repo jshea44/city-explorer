@@ -51,3 +51,15 @@ Any environment configuration steps.
 ## Collaborators
 
 List collaborators here.
+
+## Time Estimates
+
+Name of feature: Locations
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 2:15pm
+
+Finish time:
+
+Actual time needed to complete:
