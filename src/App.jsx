@@ -57,10 +57,15 @@ class App extends React.Component {
         </Form>
         <ListGroup>
           <ListGroupItem>
-            City: {this.state.location[0].display_name}
+            City:{" "}
+            {this.state.location ? this.state.location.display_name : null}
           </ListGroupItem>
-          <ListGroupItem>Latitude: {this.state.location[0].lat} </ListGroupItem>
-          <ListGroupItem>Longitue: {this.state.location[0].lon} </ListGroupItem>
+          <ListGroupItem>
+            Latitude: {this.state.location ? this.state.location.lat : null}
+          </ListGroupItem>
+          <ListGroupItem>
+            Longitue: {this.state.location ? this.state.location.lon : null}
+          </ListGroupItem>
         </ListGroup>
       </>
     );
