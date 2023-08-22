@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import { Button, ListGroupItem } from "react-bootstrap";
 import axios from "axios";
 import "./App.css";
+import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Map from "./Components/Map";
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
@@ -29,6 +30,10 @@ class App extends React.Component {
       })
       .catch((error) => {
         console.log("ERROR: ", error);
+        // make modal show when error occurs
+        return function modalOpen() {
+          console.log("modal opened");
+        };
       });
   };
 
@@ -36,6 +41,10 @@ class App extends React.Component {
     this.setState({ searchQuery: e.target.value }, () =>
       console.log(this.state.searchQuery)
     );
+  };
+
+  modalClose = () => {
+    console.log("modal closed");
   };
 
   render() {
@@ -54,22 +63,34 @@ class App extends React.Component {
             onChange={this.handleChange}
           />
           <Button type="submit">Explore!</Button>
+          <ListGroup>
+            <ListGroupItem>
+              City:{" "}
+              {this.state.location ? this.state.location.display_name : null}
+            </ListGroupItem>
+            <ListGroupItem>
+              Latitude: {this.state.location ? this.state.location.lat : null}
+            </ListGroupItem>
+            <ListGroupItem>
+              Longitue: {this.state.location ? this.state.location.lon : null}
+            </ListGroupItem>
+          </ListGroup>
+          {this.state.location ? (
+            <Map location={this.state.location}></Map>
+          ) : null}
         </Form>
-        <ListGroup>
-          <ListGroupItem>
-            City:{" "}
-            {this.state.location ? this.state.location.display_name : null}
-          </ListGroupItem>
-          <ListGroupItem>
-            Latitude: {this.state.location ? this.state.location.lat : null}
-          </ListGroupItem>
-          <ListGroupItem>
-            Longitue: {this.state.location ? this.state.location.lon : null}
-          </ListGroupItem>
-        </ListGroup>
-        {this.state.location ? (
-          <Map location={this.state.location}></Map>
-        ) : null}
+        {/* figure out how to get modal to show when error occurs */}
+        <Modal show={this.modalOpen} onHide={this.modalClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.modalClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }
