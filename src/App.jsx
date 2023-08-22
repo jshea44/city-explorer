@@ -14,6 +14,8 @@ class App extends React.Component {
     this.state = {
       location: null,
       searchQuery: "",
+      showModal: false,
+      errorMsg: null,
     };
   }
 
@@ -30,10 +32,7 @@ class App extends React.Component {
       })
       .catch((error) => {
         console.log("ERROR: ", error);
-        // make modal show when error occurs
-        return function modalOpen() {
-          console.log("modal opened");
-        };
+        this.setState({ errorMsg: error });
       });
   };
 
@@ -43,8 +42,14 @@ class App extends React.Component {
     );
   };
 
+  modalOpen = () => {
+    console.log("modal opened");
+    this.setState({ showModal: true });
+  };
+
   modalClose = () => {
     console.log("modal closed");
+    this.setState({ showModal: false });
   };
 
   render() {
@@ -79,18 +84,21 @@ class App extends React.Component {
             <Map location={this.state.location}></Map>
           ) : null}
         </Form>
-        {/* figure out how to get modal to show when error occurs */}
-        <Modal show={this.modalOpen} onHide={this.modalClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.modalClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        {this.state.errorMsg ? (
+          <Modal show={this.modalOpen} onHide={this.modalClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Modal heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Woohoo, you are reading this text in a modal!
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.modalClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        ) : null}
       </>
     );
   }
