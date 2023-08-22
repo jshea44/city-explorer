@@ -1,5 +1,4 @@
 import React from "react";
-// import axios from "axios";
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
 class Map extends React.Component {
