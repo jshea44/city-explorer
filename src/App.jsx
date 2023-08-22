@@ -1,10 +1,10 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
 import { Button, ListGroupItem } from "react-bootstrap";
-// import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import ListGroup from "react-bootstrap/ListGroup";
+import Map from "./Components/Map";
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
 class App extends React.Component {
@@ -67,6 +67,9 @@ class App extends React.Component {
             Longitue: {this.state.location ? this.state.location.lon : null}
           </ListGroupItem>
         </ListGroup>
+        {this.state.location ? (
+          <Map location={this.state.location}></Map>
+        ) : null}
       </>
     );
   }
