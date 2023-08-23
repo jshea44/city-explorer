@@ -1,11 +1,11 @@
-import React from "react";
-import Form from "react-bootstrap/Form";
-import { Button, ListGroupItem } from "react-bootstrap";
-import axios from "axios";
-import "./App.css";
-import Modal from "react-bootstrap/Modal";
-import ListGroup from "react-bootstrap/ListGroup";
-import Map from "./Components/Map";
+import React from 'react';
+import Form from 'react-bootstrap/Form';
+import { Button, ListGroupItem } from 'react-bootstrap';
+import axios from 'axios';
+import './App.css';
+import Modal from 'react-bootstrap/Modal';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Map from './Components/Map';
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
 class App extends React.Component {
@@ -13,26 +13,30 @@ class App extends React.Component {
     super();
     this.state = {
       location: null,
-      searchQuery: "",
+      searchQuery: '',
       showModal: false,
-      errorMsg: null,
+      error: null,
     };
   }
 
   handleForm = (e) => {
-    console.log("Form handled");
+    console.log('Form handled');
     e.preventDefault();
     axios
       .get(
         `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.searchQuery}&format=json`
       )
       .then((response) => {
-        console.log("SUCCESS: ", response.data);
+        console.log('SUCCESS: ', response.data);
         this.setState({ location: response.data[0] });
+        // second request goes here (server)
+        // return axios.get("localhose/weather");
       })
+      // part of second request
       .catch((error) => {
-        console.log("ERROR: ", error);
-        this.setState({ errorMsg: error });
+        console.log('ERROR: ', error);
+        this.setState({ error: error });
+        this.modalOpen();
       });
   };
 
@@ -43,16 +47,17 @@ class App extends React.Component {
   };
 
   modalOpen = () => {
-    console.log("modal opened");
+    console.log('modal opened');
     this.setState({ showModal: true });
   };
 
   modalClose = () => {
-    console.log("modal closed");
+    console.log('modal closed');
     this.setState({ showModal: false });
   };
 
   render() {
+    console.log(this.state);
     return (
       <>
         <header>
@@ -70,7 +75,7 @@ class App extends React.Component {
           <Button type="submit">Explore!</Button>
           <ListGroup>
             <ListGroupItem>
-              City:{" "}
+              City:{' '}
               {this.state.location ? this.state.location.display_name : null}
             </ListGroupItem>
             <ListGroupItem>
@@ -84,14 +89,12 @@ class App extends React.Component {
             <Map location={this.state.location}></Map>
           ) : null}
         </Form>
-        {this.state.errorMsg ? (
-          <Modal show={this.modalOpen} onHide={this.modalClose}>
+        {this.state.error ? (
+          <Modal show={this.state.showModal} onHide={this.modalClose}>
             <Modal.Header closeButton>
-              <Modal.Title>Modal heading</Modal.Title>
+              <Modal.Title>ERROR</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              Woohoo, you are reading this text in a modal!
-            </Modal.Body>
+            <Modal.Body>{this.state.error.message}</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={this.modalClose}>
                 Close
