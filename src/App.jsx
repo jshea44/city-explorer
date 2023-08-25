@@ -6,13 +6,16 @@ import './App.css';
 import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Map from './Components/Map';
+import Weather from './Components/Weather';
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
+const PORT_LOCATION = import.meta.env.VITE_PORT_LOCATION;
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       location: null,
+      forecasts: null,
       searchQuery: '',
       showModal: false,
       error: null,
@@ -27,17 +30,24 @@ class App extends React.Component {
         `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.searchQuery}&format=json`
       )
       .then((response) => {
-        console.log('SUCCESS: ', response.data);
-        this.setState({ location: response.data[0] });
-        // second request goes here (server)
-        // return axios.get("localhose/weather");
+        
+        this.setState({ location: response.data[0] })
+        console.log(response.data[0]);
+        return axios.get(`http://localhost:3001/weather?searchQuery=${this.state.searchQuery}&lat=${response.data[0].lat}&lon=${response.data[0].lon}`)
+        
       })
-      // part of second request
+      .then((response) => {
+        console.log(response.data);
+        this.setState({forecasts: response.data});
+      })
+  
+      
       .catch((error) => {
         console.log('ERROR: ', error);
         this.setState({ error: error });
         this.modalOpen();
       });
+
   };
 
   handleChange = (e) => {
@@ -87,7 +97,20 @@ class App extends React.Component {
           </ListGroup>
           {this.state.location ? (
             <Map location={this.state.location}></Map>
-          ) : null}
+            ) : null}
+            {/* {this.state.forecasts ? (
+               this.state.forecasts.map((forecast, idx) => {
+                 return <div key={idx}>
+                        <p>{forecast.date}</p>
+                        <p>{forecast.description}</p>
+                  </div>
+                  
+               })
+
+               
+            ) : null} */}
+            <Weather forecasts={this.state.forecasts} />
+
         </Form>
         {this.state.error ? (
           <Modal show={this.state.showModal} onHide={this.modalClose}>
