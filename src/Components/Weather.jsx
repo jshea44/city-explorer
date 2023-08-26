@@ -15,16 +15,11 @@ class Weather extends React.Component {
                   <p>{forecast.date}</p>
                   <p>{forecast.description}</p>
             </div>
-            
           })
-          
         ) : null}
-      
       </>
-
     )
   }
-
 }
 
 export default Weather;

@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Map from './Components/Map';
 import Weather from './Components/Weather';
+import Movie from './Components/Movie';
 const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 const PORT_LOCATION = import.meta.env.VITE_PORT_LOCATION;
 
@@ -19,6 +20,7 @@ class App extends React.Component {
       searchQuery: '',
       showModal: false,
       error: null,
+      movies: null,
     };
   }
 
@@ -32,14 +34,17 @@ class App extends React.Component {
       .then((response) => {
         
         this.setState({ location: response.data[0] })
-        console.log(response.data[0]);
         return axios.get(`http://localhost:3001/weather?searchQuery=${this.state.searchQuery}&lat=${response.data[0].lat}&lon=${response.data[0].lon}`)
         
       })
       .then((response) => {
-        console.log(response.data);
         this.setState({forecasts: response.data});
+        return axios.get(`http://localhost:3001/movie?searchQuery=${this.state.searchQuery}`);
       })
+      .then((response) => {
+        this.setState({movies:response.data});
+      })
+     
   
       
       .catch((error) => {
@@ -98,18 +103,8 @@ class App extends React.Component {
           {this.state.location ? (
             <Map location={this.state.location}></Map>
             ) : null}
-            {/* {this.state.forecasts ? (
-               this.state.forecasts.map((forecast, idx) => {
-                 return <div key={idx}>
-                        <p>{forecast.date}</p>
-                        <p>{forecast.description}</p>
-                  </div>
-                  
-               })
-
-               
-            ) : null} */}
             <Weather forecasts={this.state.forecasts} />
+            <Movie movies={this.state.movies}/>
 
         </Form>
         {this.state.error ? (
