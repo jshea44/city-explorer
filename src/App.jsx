@@ -8,7 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Map from './Components/Map';
 import Weather from './Components/Weather';
 import Movie from './Components/Movie';
-const API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
+const VITE_LOCATIONIQ_API_KEY = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 const PORT_LOCATION = import.meta.env.VITE_PORT_LOCATION;
 
 class App extends React.Component {
@@ -29,7 +29,7 @@ class App extends React.Component {
     e.preventDefault();
     axios
       .get(
-        `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.searchQuery}&format=json`
+        `https://us1.locationiq.com/v1/search?key=${VITE_LOCATIONIQ_API_KEY}&q=${this.state.searchQuery}&format=json`
       )
       .then((response) => {
         this.setState({ location: response.data[0] });
