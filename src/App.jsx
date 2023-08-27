@@ -32,27 +32,26 @@ class App extends React.Component {
         `https://us1.locationiq.com/v1/search?key=${API_KEY}&q=${this.state.searchQuery}&format=json`
       )
       .then((response) => {
-        
-        this.setState({ location: response.data[0] })
-        return axios.get(`${PORT_LOCATION}/weather?searchQuery=${this.state.searchQuery}&lat=${response.data[0].lat}&lon=${response.data[0].lon}`)
-        
+        this.setState({ location: response.data[0] });
+        return axios.get(
+          `${PORT_LOCATION}/weather?searchQuery=${this.state.searchQuery}&lat=${response.data[0].lat}&lon=${response.data[0].lon}`
+        );
       })
       .then((response) => {
-        this.setState({forecasts: response.data});
-        return axios.get(`${PORT_LOCATION}/movie?searchQuery=${this.state.searchQuery}`);
+        this.setState({ forecasts: response.data });
+        return axios.get(
+          `${PORT_LOCATION}/movie?searchQuery=${this.state.searchQuery}`
+        );
       })
       .then((response) => {
-        this.setState({movies:response.data});
+        this.setState({ movies: response.data });
       })
-     
-  
-      
+
       .catch((error) => {
         console.log('ERROR: ', error);
         this.setState({ error: error });
         this.modalOpen();
       });
-
   };
 
   handleChange = (e) => {
@@ -102,10 +101,9 @@ class App extends React.Component {
           </ListGroup>
           {this.state.location ? (
             <Map location={this.state.location}></Map>
-            ) : null}
-            <Weather forecasts={this.state.forecasts} />
-            <Movie movies={this.state.movies}/>
-
+          ) : null}
+          <Weather forecasts={this.state.forecasts} />
+          <Movie movies={this.state.movies} />
         </Form>
         {this.state.error ? (
           <Modal show={this.state.showModal} onHide={this.modalClose}>
