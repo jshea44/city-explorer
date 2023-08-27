@@ -34,12 +34,12 @@ class App extends React.Component {
       .then((response) => {
         
         this.setState({ location: response.data[0] })
-        return axios.get(`http://localhost:3001/weather?searchQuery=${this.state.searchQuery}&lat=${response.data[0].lat}&lon=${response.data[0].lon}`)
+        return axios.get(`${PORT_LOCATION}/weather?searchQuery=${this.state.searchQuery}&lat=${response.data[0].lat}&lon=${response.data[0].lon}`)
         
       })
       .then((response) => {
         this.setState({forecasts: response.data});
-        return axios.get(`http://localhost:3001/movie?searchQuery=${this.state.searchQuery}`);
+        return axios.get(`${PORT_LOCATION}/movie?searchQuery=${this.state.searchQuery}`);
       })
       .then((response) => {
         this.setState({movies:response.data});
