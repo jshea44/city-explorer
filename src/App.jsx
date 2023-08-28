@@ -72,6 +72,7 @@ class App extends React.Component {
 
   render() {
     console.log(this.state);
+    console.log(VITE_LOCATIONIQ_API_KEY);
     return (
       <>
         <header>
